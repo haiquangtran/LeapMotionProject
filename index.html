@@ -1,51 +1,101 @@
 <!doctype html>
 <html class="no-js" lang="">
+
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Image Viewer</title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Image Viewer</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <!-- <link rel="stylesheet" href="css/bootstrap-theme.min.css"> -->
-  <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/vendor/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bs_overwrite.css">
+    <link rel="stylesheet" href="css/vendor/nprogress.css">
+    <link rel="stylesheet" href="css/vendor/css3-animation-cheatsheet.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/main.css">
 
-  <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+    <script src="js/vendor/modernizr-2.8.3.min.js"></script>
 
-  <!-- LeapMotion libs -->
-  <script src="js/vendor/leap-0.6.4.js"></script>
-  <script src="js/vendor/leap-plugins-0.1.11.js"></script>
+    <!-- LeapMotion libs -->
+    <script src="js/vendor/leap-0.6.4.js"></script>
+    <script src="js/vendor/leap-plugins-0.1.11.js"></script>
 </head>
+
 <body>
-  <!--[if lt IE 8]>
+    <!--[if lt IE 8]>
   <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
 
-  <div class="image-viewer-container">
-    <div id="main-panel">
-      <!-- panel that will contain the images being manipulated -->
+    <!-- Page Wrapper -->
+    <div id="page-wrapper">
+
+        <!-- Page Container -->
+        <div id="page-container" class="sidebar-partial sidebar-visible-lg sidebar-no-animations">
+
+            <!-- Main Sidebar -->
+            <div id="sidebar">
+                <!-- Wrapper for scrolling functionality -->
+                <div id="sidebar-scroll">
+                    <!-- Sidebar Content -->
+                    <div class="sidebar-content">
+                        <!-- Brand -->
+                        <a href="index.html" class="sidebar-brand push">
+                            <i class="glyphicon glyphicon-picture"></i><span class="sidebar-nav-mini-hide"><strong>Image</strong>Viewer</span>
+                        </a>
+                        <!-- END Brand -->
+
+                        <!-- Image Thumbnail Display -->
+                        <div id="image-thumbnail-display" class="text-center">
+
+                        </div>
+                        <!-- END Image Thumbnail Display -->
+
+                    </div>
+                    <!-- END Sidebar Content -->
+                </div>
+                <!-- END Wrapper for scrolling functionality -->
+            </div>
+            <!-- END Main Sidebar -->
+
+            <!-- Main Container -->
+            <div id="main-container">
+
+                <!-- Page content -->
+                <div id="page-content">
+
+                    <!-- Image Display -->
+                    <div id="image-display">
+
+                    </div>
+                    <!-- END Image Display -->
+
+                </div>
+                <!-- END Page Content -->
+
+            </div>
+            <!-- END Main Container -->
+        </div>
+        <!-- END Page Container -->
     </div>
+    <!-- END Page Wrapper -->
 
-    <div id="list-panel">
-      <!-- panel that will contain images that may be selected and moved to the main panel -->
+
+    <div id="cursor">
+        <span class="glyphicon glyphicon-record" aria-hidden="true"></span>
     </div>
-  </div>
+    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script>
+        window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')
+    </script>
 
-  <div id="cursor">
-      <span class="glyphicon glyphicon-record" aria-hidden="true"></span>
-  </div>
+    <script src="js/vendor/bootstrap.min.js"></script>
 
-  <!-- /container -->
-
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-  <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
-
-  <script src="js/vendor/bootstrap.min.js"></script>
-
-  <script src="js/plugins.js"></script>
-  <script src="js/app/leap_image.js"></script>
-  <script src="js/app/leap_app.js"></script>
+    <script src="js/plugins.js"></script>
+    <script src="js/app/leap_image.js"></script>
+    <script src="js/app/leap_app.js"></script>
 </body>
+
 </html>

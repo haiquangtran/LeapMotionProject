@@ -1,39 +1,35 @@
-
-
-/* ==========================================================================
-   Image-Viewer's custom styles
-   ========================================================================== */
-
-#image-viewer-container{
-  width: 100%;
-  height: 100%;
-}
-
-#main-panel{
-  width: 80%;
-  height: 100%;
-  background-color: grey;
-}
-
-#list-panel{
-  width: 20%;
-  height: 100%;
-  background-color: blue;
-}
-
-.leap-image-on-main{
-  position: absolute;
-  z-index: 0;
-}
+/*
+=================================================================
+MAIN STYLES
+=================================================================
+*/
 
 #cursor{
   position: absolute;
-  width: 100px;
-  height: 100px;
+  width: 20px;
+  height: 20px;
   top: 100px;
-  right: 200px;
+  left: 400px;
 }
 
 #cursor span{
   color: grey;
+}
+
+.image-thumbnail{
+    border: 2px solid;
+    border-color: rgba(253, 227, 167, 0.2);
+    margin-bottom: 20px;
+}
+
+.image-thumbnail.selected{
+    -webkit-animation: border-pulsate 2s infinite;
+    -moz-animation: border-pulsate 2s infinite;
+    animation: border-pulsate 2s infinite;
+}
+
+@keyframes border-pulsate {
+    0%   { border-color: rgba(253, 227, 167, 1); }
+    50%  { border-color: rgba(253, 227, 167, 0.2); }
+    100% { border-color: rgba(253, 227, 167, 1); }
 }
