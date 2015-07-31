@@ -161,7 +161,7 @@ LeapImage.prototype._updateZIndex = function (modZ) {
     var curZ = $(this.IMAGE).css('z-index').replace(/[^-\d\.]/g, ''),
         newZ = curZ + modZ;
     
-    $(this.IMAGE).css('z', newZ);
+    $(this.IMAGE).css('z-index', newZ);
 }
 
 LeapImage.prototype._coords = function () {
