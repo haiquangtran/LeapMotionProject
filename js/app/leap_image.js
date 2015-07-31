@@ -78,8 +78,8 @@ LeapImage.prototype.addToDisplay = function (displayType) {
 }
 
 LeapImage.prototype.tap = function () {
-    
-    if( this._isSelected() ){
+    console.log("tap");
+    if (this._isSelected()) {
         $(this.IMAGE).removeClass("selected");
     } else {
         $(this.IMAGE).addClass("selected")
@@ -114,8 +114,15 @@ LeapImage.prototype.bringBackward = function(){
     //TODO
 }
 
-LeapImage.prototype.rotate = function(amount){
-    //TODO
+LeapImage.prototype.rotate = function(handPosition, rotation){
+    // var img = this.IMAGE;
+    
+    // img.style.position = "absolute";
+    // img.style.left = handPosition[0] - img.width  / 2 + 'px';
+    // img.style.top  = handPosition[1] - img.height / 2 + 'px';
+    // img.style.transform = 'rotate(' + -rotation + 'rad)';
+    // img.style.webkitTransform = img.style.MozTransform = img.style.msTransform =
+    // img.style.OTransform = img.style.transform;
 }
 
 LeapImage.prototype.isInBounds = function (x, y) {
@@ -157,11 +164,23 @@ LeapImage.prototype._scale = function (scale) {
       
 }
 
+LeapImage.prototype._rotate = function (scale) {
+    
+    var width = $(this.IMAGE).css("width").replace(/[^-\d\.]/g, ''),
+        height = $(this.IMAGE).css("height").replace(/[^-\d\.]/g, ''),
+        newWidth = Math.floor(width * scale),
+        newHeight = Math.floor(height * scale);
+    
+    $(this.IMAGE).css("width", newWidth);
+    $(this.IMAGE).css("height", newHeight);
+      
+}
+
 LeapImage.prototype._updateZIndex = function (modZ) {
     var curZ = $(this.IMAGE).css('z-index').replace(/[^-\d\.]/g, ''),
         newZ = curZ + modZ;
     
-    $(this.IMAGE).css('z', newZ);
+    $(this.IMAGE).css('z-index', newZ);
 }
 
 LeapImage.prototype._coords = function () {
