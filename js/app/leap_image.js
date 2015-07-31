@@ -114,7 +114,7 @@ LeapImage.prototype.bringBackward = function(){
     //TODO
 }
 
-LeapImage.prototype.rotate = function(amount){
+LeapImage.prototype.rotate = function(degree){
     //TODO
 }
 
