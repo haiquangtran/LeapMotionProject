@@ -102,7 +102,7 @@ body {
 }
 
 #sidebar {
-    width: 0;
+    width: 300;
     position: absolute;
     overflow: hidden;
 }
@@ -111,6 +111,10 @@ body {
 #main-container {
     -webkit-transition: all 0.2s ease-out;
     transition: all 0.2s ease-out;
+}
+
+#main-container{
+    margin-left: 300px;
 }
 
 #page-content {
@@ -384,17 +388,6 @@ a.sidebar-title:focus {
         transition: none;
     }
 
-    /* Reset sidebar classes used only on small screens */
-    .sidebar-visible-xs #sidebar,
-    .sidebar-alt-visible-xs #sidebar-alt {
-        width: 0;
-    }
-
-    .sidebar-visible-xs #main-container,
-    .sidebar-alt-visible-xs #main-container {
-        margin-left: 0;
-        margin-right: 0;
-    }
 
     .sidebar-visible-xs.header-fixed-top header.navbar-fixed-top,
     .sidebar-visible-xs.header-fixed-bottom header.navbar-fixed-bottom,
@@ -406,44 +399,14 @@ a.sidebar-title:focus {
         left: 0;
     }
 
-    /* Both Sidebars */
-    #sidebar,
-    #sidebar-alt,
-    .sidebar-partial #sidebar,
-    .sidebar-alt-partial #sidebar-alt {
-        width: 0;
-        opacity: 0.2;
-        filter: alpha(opacity=20);
-    }
-
-    .sidebar-partial #sidebar,
-    .sidebar-alt-partial #sidebar-alt {
-        width: 65px;
-    }
-
     .sidebar-partial #sidebar:hover,
     .sidebar-visible-lg #sidebar,
-    .sidebar-visible-lg.sidebar-partial #sidebar,
-    .sidebar-alt-partial #sidebar-alt:hover,
-    .sidebar-alt-visible-lg #sidebar-alt,
-    .sidebar-alt-visible-lg.sidebar-alt-partial #sidebar-alt {
+    .sidebar-visible-lg.sidebar-partial #sidebar {
         width: 300px;
         opacity: 1;
         filter: alpha(opacity=100);
     }
-
-    .sidebar-partial #sidebar .sidebar-brand i,
-    .sidebar-alt-partial #sidebar-alt .sidebar-brand i {
-        display: none;
-    }
-
-    .sidebar-partial #sidebar:hover .sidebar-brand i,
-    .sidebar-visible-lg #sidebar .sidebar-brand i,
-    .sidebar-alt-partial #sidebar-alt:hover .sidebar-brand i,
-    .sidebar-alt-visible-lg #sidebar-alt .sidebar-brand i {
-        display: inline-block;
-    }
-
+    
     /* Main Sidebar */
     .sidebar-partial #main-container {
         margin-left: 65px;
@@ -467,97 +430,6 @@ a.sidebar-title:focus {
     .sidebar-visible-lg.header-fixed-bottom header.navbar-fixed-bottom,
     .sidebar-visible-lg.footer-fixed #main-container #page-content + footer {
         left: 300px;
-    }
-
-    /* Alternative Sidebar */
-    .sidebar-alt-partial #main-container {
-        margin-right: 65px;
-    }
-
-    .sidebar-alt-partial #sidebar-alt:hover ~ #main-container,
-    .sidebar-alt-visible-lg #main-container {
-        margin-right: 300px;
-    }
-
-    .sidebar-alt-partial.footer-fixed #main-container #page-content + footer,
-    .sidebar-alt-partial.header-fixed-top header.navbar-fixed-top,
-    .sidebar-alt-partial.header-fixed-bottom header.navbar-fixed-bottom {
-        right: 65px;
-    }
-
-    .sidebar-alt-partial #sidebar-alt:hover ~ #main-container header.navbar-fixed-top,
-    .sidebar-alt-partial #sidebar-alt:hover ~ #main-container header.navbar-fixed-bottom,
-    .sidebar-alt-partial #sidebar-alt:hover ~ #main-container #page-content + footer,
-    .sidebar-alt-visible-lg.header-fixed-top header.navbar-fixed-top,
-    .sidebar-alt-visible-lg.header-fixed-bottom header.navbar-fixed-bottom,
-    .sidebar-alt-visible-lg.footer-fixed #main-container #page-content + footer {
-        right: 300px;
-    }
-
-    /* Main Sidebar - Mini mode */
-    .sidebar-mini.sidebar-visible-lg-mini #main-container {
-        margin-left: 40px;
-    }
-
-    .sidebar-mini.sidebar-visible-lg-mini #main-container header.navbar-fixed-top,
-    .sidebar-mini.sidebar-visible-lg-mini #main-container header.navbar-fixed-bottom,
-    .sidebar-mini.sidebar-visible-lg-mini #main-container #page-content + footer {
-        left: 40px;
-    }
-
-    .sidebar-mini.sidebar-visible-lg-mini #sidebar {
-        overflow: visible;
-        opacity: 1;
-        filter: alpha(opacity=100);
-        z-index: 1029;
-    }
-
-    .sidebar-mini.sidebar-visible-lg-mini #sidebar .sidebar-content {
-        width: 40px;
-    }
-
-    .sidebar-mini.sidebar-visible-lg-mini #sidebar .sidebar-nav-mini-hide,
-    .sidebar-mini.sidebar-visible-lg-mini #sidebar .sidebar-header > span {
-        display: none;
-    }
-
-    .sidebar-mini.sidebar-visible-lg-mini #sidebar .sidebar-header {
-        padding: 0;
-        margin: 5px 0;
-        border-top: 1px solid rgba(255, 255, 255, .1);
-    }
-
-    .sidebar-mini.sidebar-visible-lg-mini #sidebar .sidebar-nav li {
-        position: relative;
-    }
-
-    .sidebar-mini.sidebar-visible-lg-mini #sidebar .sidebar-nav .sidebar-nav-menu + ul {
-        position: absolute;
-        width: 220px;
-        top: 0;
-        right: -220px;
-        margin: 0;
-        padding: 6px 5px;
-        border-left: 3px solid #1bbae1;
-        background-color: #394263;
-    }
-
-    .sidebar-mini.sidebar-visible-lg-mini #sidebar .sidebar-nav ul a {
-        margin: 0;
-        padding-left: 10px;
-        border-left: none;
-    }
-
-    .sidebar-mini.sidebar-visible-lg-mini #sidebar .sidebar-nav ul ul {
-        margin-left: 0;
-    }
-
-    .sidebar-mini.sidebar-visible-lg-mini #sidebar .sidebar-nav > li.active > ul {
-        display: none;
-    }
-
-    .sidebar-mini.sidebar-visible-lg-mini #sidebar .sidebar-nav .sidebar-nav-menu.open + ul {
-        display: block !important;
     }
 
     /* Nav Horizontal */

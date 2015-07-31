@@ -4,32 +4,78 @@ MAIN STYLES
 =================================================================
 */
 
-#cursor{
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  top: 100px;
-  left: 400px;
+#cursor {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 100px;
+    left: 400px;
 }
-
-#cursor span{
-  color: grey;
+#cursor span {
+    color: grey;
 }
-
-.image-thumbnail{
+.image-thumbnail {
     border: 2px solid;
     border-color: rgba(253, 227, 167, 0.2);
     margin-bottom: 20px;
 }
-
-.image-thumbnail.selected{
-    -webkit-animation: border-pulsate 2s infinite;
-    -moz-animation: border-pulsate 2s infinite;
-    animation: border-pulsate 2s infinite;
+.image-thumbnail.selected {
+    -webkit-animation: border-pulsate-light 2s infinite;
+    -moz-animation: border-pulsate-light 2s infinite;
+    animation: border-pulsate-light 2s infinite;
+}
+.image{
+    border: 2px solid;
+    border-color: rgba(38, 194, 129, 0.2);
+    margin:10px;
+}
+.image.selected{
+    -webkit-animation: border-pulsate-dark 2s infinite;
+    -moz-animation: border-pulsate-dark 2s infinite;
+    animation: border-pulsate-dark 2s infinite;
+}
+.movable {
+    position: absolute;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+#image-display {
+/*    position: relative;*/
 }
 
-@keyframes border-pulsate {
-    0%   { border-color: rgba(253, 227, 167, 1); }
-    50%  { border-color: rgba(253, 227, 167, 0.2); }
-    100% { border-color: rgba(253, 227, 167, 1); }
+.helper-box {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    top: 0;
+    left: 0;
+}
+/*
+=================================================================
+ANIMATIONS
+=================================================================
+*/
+@keyframes border-pulsate-light {
+    0% {
+        border-color: rgba(253, 227, 167, 1);
+    }
+    50% {
+        border-color: rgba(253, 227, 167, 0.2);
+    }
+    100% {
+        border-color: rgba(253, 227, 167, 1);
+    }
+}
+
+@keyframes border-pulsate-dark {
+    0% {
+        border-color: rgba(38, 194, 129, 1);
+    }
+    50% {
+        border-color: rgba(38, 194, 129, 0.2);
+    }
+    100% {
+        border-color: rgba(38, 194, 129, 1);
+    }
 }
