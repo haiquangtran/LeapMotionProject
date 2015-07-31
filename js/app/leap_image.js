@@ -66,7 +66,6 @@ LeapImage.prototype.addToDisplay = function (displayType) {
         $(this.IMAGE).remove();
         
         $(this.IMAGE).addClass(imageClass);
-        $(this.IMAGE).addClass("selected");
 
         // add it
         document.getElementById(imageDestId).appendChild(this.IMAGE);
