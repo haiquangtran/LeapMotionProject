@@ -66,7 +66,6 @@ LeapImage.prototype.addToDisplay = function (displayType) {
         $(this.IMAGE).remove();
         
         $(this.IMAGE).addClass(imageClass);
-        $(this.IMAGE).addClass("selected");
 
         // add it
         document.getElementById(imageDestId).appendChild(this.IMAGE);
@@ -114,15 +113,8 @@ LeapImage.prototype.bringBackward = function(){
     //TODO
 }
 
-LeapImage.prototype.rotate = function(handPosition, rotation){
-    // var img = this.IMAGE;
-    
-    // img.style.position = "absolute";
-    // img.style.left = handPosition[0] - img.width  / 2 + 'px';
-    // img.style.top  = handPosition[1] - img.height / 2 + 'px';
-    // img.style.transform = 'rotate(' + -rotation + 'rad)';
-    // img.style.webkitTransform = img.style.MozTransform = img.style.msTransform =
-    // img.style.OTransform = img.style.transform;
+LeapImage.prototype.rotate = function(degrees){
+    //TODO
 }
 
 LeapImage.prototype.isInBounds = function (x, y) {
