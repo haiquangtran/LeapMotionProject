@@ -114,6 +114,10 @@ LeapImage.prototype.bringBackward = function(){
     //TODO
 }
 
+LeapImage.prototype.rotate = function(amount){
+    //TODO
+}
+
 LeapImage.prototype.isInBounds = function (x, y) {
     
     var coords = this._coords();
