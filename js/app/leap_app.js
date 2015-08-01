@@ -68,6 +68,7 @@ var App = function () {
       } else {
         moveMainImage(hand);
         rotateMainImage(hand);
+        scaleMainImage(hand);
       }
     
       // // hand grab to select and move
@@ -123,6 +124,17 @@ var App = function () {
     var rotateMainImage = function(hand) {
       if (selectedImage == null) { return; }
       selectedImage.rotate(hand.roll());
+    }
+
+     /* Scale the selectedImage on the main display. */
+    var scaleMainImage = function(hand) {
+      if (selectedImage == null) { return; }
+      
+      if (hand.pinchStrength < 0.5) {
+        selectedImage.scaleUp();
+      } else if (hand.pinchStrength >= 0.5) {
+        selectedImage.scaleDown();
+      }
     }
 
     /* Gesture action for selecting multiples images in the side display. */
