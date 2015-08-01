@@ -37,7 +37,12 @@ var App = function () {
         });
 
         //Recognize built-in gestures
-        leapController.on("gesture", function(gesture) {
+        leapController.on("gesture", function(gesture, frame) {
+          if (frame.hands.length > 0) {
+            var hand = frame.hands[0];
+            //Selecting and moving an image in main display
+            manipulateMainImageGesture(hand, gesture);
+          }
           moveToMainDisplayGesture(gesture);
         });
 
@@ -48,33 +53,34 @@ var App = function () {
     };
 
     /* Gesture actions for selection and manipulating an image in the main display */
-    var manipulateMainImageGesture = function(hand) {
+    var manipulateMainImageGesture = function(hand, gesture) {
       if (mainImages.length == 0) { return; }
 
-      // hand grab to select and move
-      if (hand.grabStrength == 1) {
-
-        selectMainImage(hand);
-
-        //move selected Image
+      if (gesture != null) {
+        if (gesture.type == "screenTap") {
+              console.log("Screentapping");
+              if (selectedImage == null) {
+                selectMainImage(hand);
+              } else {
+                deselectMainImage(hand);
+              }
+            }
+      } else {
         moveMainImage(hand);
-        //scale selected Image
-
-        //rotate selected Image
         rotateMainImage(hand);
-
-      } else if (hand.grabStrength == 0 && selectedImage != null) {
-        unselectMainImage(hand);
       }
-      //select an image
-      // selectMainImage(hand);
-      //unselect image
-      // unselectMainImage();
-      //move image
-      // moveMainImage(hand);
-      //scale image
-      // scaleMainImage(hand);
-      //rotate image
+    
+      // // hand grab to select and move
+      // if (hand.grabStrength == 1) {
+      //   selectMainImage(hand);
+      //   //move selected Image
+      //   moveMainImage(hand);
+      //   //rotate selected Image
+      //   rotateMainImage(hand);
+
+      // } else if (hand.grabStrength == 0 && selectedImage != null) {
+      //   deselectMainImage(hand);
+      // }
 
     };
 
@@ -94,8 +100,8 @@ var App = function () {
       }
     };
 
-    /* Unselects the image from the main display. Sets selectedImage to null. */
-    var unselectMainImage = function(hand) {
+    /* Deselects the image from the main display. Sets selectedImage to null. */
+    var deselectMainImage = function(hand) {
       if (selectedImage == null) { return; }
       selectedImage = null;
     }
@@ -179,14 +185,14 @@ var App = function () {
       }
     }
 
-    /* Adds all images from selectedImages list into mainImages List. Unselects and removes all images in selectedImages list. */
+    /* Adds all images from selectedImages list into mainImages List. Deselects and removes all images in selectedImages list. */
     var addToMainImages = function() {
       var index = 0;
       //Add all selected images to main images list
       for (; index < selectedImages.length; index++) {
         var currentImage = selectedImages[index];
         mainImages.push(currentImage);
-        //unselected and remove all images from selected images list
+        //deselects and remove all images from selected images list
         selectedImages[index].tap();
         selectedImages.splice(index, 1);
       }
@@ -211,7 +217,7 @@ var App = function () {
       }
     };
 
-    // TODO: unselect images from side-display
+    // TODO: deselect images from side-display
     /* Removes an image within the coordinates of your hand from the selected images list. Adds it to side-display */
     var removeFromSelectedImages = function(hand) {
       var handPosition = hand.screenPosition();
