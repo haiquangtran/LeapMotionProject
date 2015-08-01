@@ -28,8 +28,8 @@ var App = function () {
 
                 //Selecting multiples that will be moved to main display
                 selectMultipleImagesGesture(hand);
-                //Selecting and moving an image in main display
-                manipulateMainImageGesture(hand);
+                //Select or deselect image in main display
+                manipulateMainImageGesture(frame);
             }
 
         }).use('screenPosition', {
@@ -38,11 +38,8 @@ var App = function () {
 
         //Recognize built-in gestures
         leapController.on("gesture", function(gesture, frame) {
-          if (frame.hands.length > 0) {
-            var hand = frame.hands[0];
-            //Selecting and moving an image in main display
-            manipulateMainImageGesture(hand, gesture);
-          }
+          //Moving and manipulating an image in main display
+          manipulateMainImageGesture(frame, gesture);
           moveToMainDisplayGesture(gesture);
         });
 
@@ -53,22 +50,28 @@ var App = function () {
     };
 
     /* Gesture actions for selection and manipulating an image in the main display */
-    var manipulateMainImageGesture = function(hand, gesture) {
+    var manipulateMainImageGesture = function(frame, gesture) {
       if (mainImages.length == 0) { return; }
 
-      if (gesture != null) {
-        if (gesture.type == "screenTap") {
-              console.log("Screentapping");
-              if (selectedImage == null) {
-                selectMainImage(hand);
-              } else {
-                deselectMainImage(hand);
-              }
-            }
-      } else {
-        moveMainImage(hand);
-        rotateMainImage(hand);
-        scaleMainImage(hand);
+      if (frame.hands.length > 0) {
+        var hand = frame.hands[0];
+
+        if (gesture != null) {
+          if (gesture.type == "screenTap") {
+                console.log("Screentapping");
+                if (selectedImage == null) {
+                  selectMainImage(hand);
+                } else {
+                  deselectMainImage(hand);
+                }
+          } else if (gesture.type == "circle") {
+            zoomMainImage(frame, gesture);
+          }
+        } else {
+          moveMainImage(hand);
+          rotateMainImage(hand);
+          // scaleMainImage(hand);
+        }
       }
 
     };
@@ -114,13 +117,32 @@ var App = function () {
       selectedImage.rotate(hand.roll());
     }
 
-     /* Scale the selectedImage on the main display. */
+    /* Scale the selectedImage on the main display. */
     var scaleMainImage = function(hand) {
       if (selectedImage == null) { return; }
 
       if (hand.pinchStrength < 0.5) {
         selectedImage.scaleUp();
       } else if (hand.pinchStrength >= 0.5) {
+        selectedImage.scaleDown();
+      }
+    }
+
+    /* Scale the selectedImage on the main display. */
+    var zoomMainImage = function(frame, gesture) {
+      if (selectedImage == null) { return; }
+
+      var circleProgress = gesture.progress;
+      var clockwise = false;
+      var pointableID = gesture.pointableIds[0];
+      var direction = frame.pointable(pointableID).direction;
+      var dotProduct = Leap.vec3.dot(direction, gesture.normal);
+
+      if (dotProduct  >  0) clockwise = true;
+
+      if (clockwise) {
+        selectedImage.scaleUp();
+      } else if (!clockwise) {
         selectedImage.scaleDown();
       }
     }

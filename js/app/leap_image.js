@@ -38,10 +38,10 @@ function LeapImage() {
             imageDestId: 'image-display'
         },
     };
-    this.MIN_WIDTH = 190;
-    this.MAX_WIDTH = 290;
-    this.MIN_HEIGHT = 90;
-    this.MAX_HEIGHT = 260;
+    this.MIN_WIDTH = 140;
+    this.MAX_WIDTH = 340;
+    this.MIN_HEIGHT = 40;
+    this.MAX_HEIGHT = 310;
 
 };
 
