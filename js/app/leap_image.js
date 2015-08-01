@@ -90,10 +90,9 @@ LeapImage.prototype.moveTo = function (x, y) {
     
     this._calculateBounds();
     var coords = this._coords();
-    
+
     this.IMAGE.style.left = Math.min(this.maxBoundX, Math.max(this.minBoundX, x)) + "px";
     this.IMAGE.style.top = Math.min(this.maxBoundY, Math.max(this.minBoundY, y)) + "px";
-    
 }
 
 
@@ -113,8 +112,8 @@ LeapImage.prototype.bringBackward = function(){
     //TODO
 }
 
-LeapImage.prototype.rotate = function(degrees){
-    //TODO
+LeapImage.prototype.rotate = function(rads){
+    this._rotate(rads);
 }
 
 LeapImage.prototype.isInBounds = function (x, y) {
@@ -131,18 +130,6 @@ LeapImage.prototype.isInBounds = function (x, y) {
     
     return satisfiesHorizontalBounds && satisfiesVerticalBounds;
     
-}
-
-LeapImage.prototype.getWidth = function() {
-    var coords = this._coords();
-    var width = coords.width;    
-    return width;
-}
-
-LeapImage.prototype.getHeight = function() {
-    var coords = this._coords();
-    var height = coords.height;
-    return height;
 }
 
 // Helper methods

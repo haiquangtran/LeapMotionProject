@@ -4,7 +4,7 @@ var App = function () {
     var mainImages = [];
     var listImages = [];
     var selectedImages = [];
-    var selectedImage;
+    var selectedImage = null;  //selected image in main display
 
     /* Helper variables - set in uiInit() */
     var page, pageContent, sidebar, imageDisplay;
@@ -26,22 +26,17 @@ var App = function () {
                 $("#cursor").css("left", xValue);
                 $("#cursor").css("top", yValue);
 
-           
-                // printGestures(frame);
-                // printHandGestures(frame);
-                selectMultipleImages(hand);
+                selectMultipleImagesGesture(hand);
+                manipulateMainImageGesture(hand);
             }
 
         }).use('screenPosition', {
-            // scale: 0.25, 
             verticalOffset: 1200
         });
 
         //Recognize built-in gestures
-        leapController.on("gesture", function(gesture, frame) {
-          var hand = frame.hands[0];
-
-          moveToMainDisplay(gesture);
+        leapController.on("gesture", function(gesture) {
+          moveToMainDisplayGesture(gesture);
         });
 
         // This is fairly important - it prevents the framerate from dropping while there are no hands in the frame.
@@ -50,30 +45,123 @@ var App = function () {
 
     };
 
-    var selectMultipleImages = function(hand, gesture) {
+    var manipulateMainImageGesture = function(hand) {
+      if (mainImages.length == 0) { return; }
+
+      // hand grab to select and move
+      if (hand.grabStrength == 1) {
+
+        selectMainImage(hand);
+
+        //move selected Image
+        moveMainImage(hand);
+        //scale selected Image
+
+        //rotate selected Image
+
+
+      } else if (hand.grabStrength == 0 && selectedImage != null) {
+        unselectMainImage(hand);
+      }
+      //select an image
+      // selectMainImage(hand);
+      //unselect image
+      // unselectMainImage();
+      //move image
+      // moveMainImage(hand);
+      //scale image
+      // scaleMainImage(hand);
+      //rotate image
+
+    };
+
+    var selectMainImage = function(hand) {
+      if (selectedImage != null || selectedImages.length != 0) { return; }
+
+      var handPosition = hand.screenPosition();
+      var index = 0;
+      for (; index < mainImages.length; index++) {
+        var currentImage = mainImages[index];
+        //Check if image is under hand
+        if (currentImage.isInBounds(handPosition[0], handPosition[1])) {
+          selectedImage = currentImage;
+          return;
+        }
+      }
+    };
+
+    var unselectMainImage = function(hand) {
+      if (selectedImage == null) { return; }
+      selectedImage = null;
+    }
+
+    var moveMainImage = function(hand) {
+      if (selectedImage != null) {
+
+        var handPosition = hand.screenPosition();
+        //Align cursor in middle of image
+        var x = handPosition[0] - selectedImage.IMAGE.width / 2;
+        var y = handPosition[1] - selectedImage.IMAGE.height / 2;
+
+        selectedImage.moveTo(x, y);
+      }
+    }
+
+    var selectMultipleImagesGesture = function(hand, gesture) {
+      if (listImages.length == 0 || selectedImage != null) { return; }
+
       //Select on grab
       if (hand.grabStrength == 1) {
         console.log("selected multiple images");
         addToSelectedImages(hand);
       }
 
+      //TESTING OTHER GESTURES
       // if (gesture.type == "screenTap") {
+      //   addToSelectedImages(hand);
+      // } else if (gesture.type == "keyTap") {
+      //   addToSelectedImages(hand);
+      // } else if (gesture.type == "circle") {
       //   addToSelectedImages(hand);
       // }
     };
 
-    var moveToMainDisplay = function(gesture) {
-      if (gesture.type == "circle" && selectedImages.length != 0) {
-        console.log("move to main display");
-        addToMainImages();
+    var moveToMainDisplayGesture = function(gesture) {
+      if (selectedImages.length == 0) { return; }
 
-        var index = 0;
-        for (; index < mainImages.length; index++) {
-          var currentImage = mainImages[index];
-          var imageHeight = currentImage.getHeight();
-          var offset = 20;
+      if (gesture.type == "swipe") {
+        //Classify swipe as either horizontal or vertical
+        var isHorizontal = Math.abs(gesture.direction[0]) > Math.abs(gesture.direction[1]);
+
+        if (isHorizontal) {
+          //Right swipe
+          if (gesture.direction[0] > 0) {
+            moveToMainDisplay(gesture);
+          }
+        }
+      }
+
+      //TESTING CIRCLE GESTURE
+      // if (gesture.type == "circle" && selectedImages.length != 0) {
+      //   console.log("move to main display");
+      //   moveToMainDisplay(gesture);
+      // } 
+    }
+
+    /* Moves selected images from list-panel into main display */
+    var moveToMainDisplay = function(gesture) {
+      addToMainImages();
+
+      var index = 0;
+      for (; index < mainImages.length; index++) {
+        var currentImage = mainImages[index];
+        var imageHeight = currentImage.IMAGE.height;
+        var offset = 10;
+        //only move images from list panel
+        if (!currentImage._isInMainDisplay()){
           currentImage.addToDisplay("MAIN");
-          currentImage.moveTo(0, (imageHeight + offset) * index);
+          //TODO: figure out where to put the images on main display
+          currentImage.moveTo(0, offset + (imageHeight + offset) * (index));
         }
       }
     }
@@ -98,7 +186,7 @@ var App = function () {
 
       for (; index < listImages.length; index++) {
         var currentImage = listImages[index];
-
+        //Check if image is under hand
         if (listImages[index].isInBounds(handPosition[0], handPosition[1])) {
           selectedImages.push(currentImage);
           //Select image
@@ -110,6 +198,7 @@ var App = function () {
       }
     };
 
+    // TODO: unselect images from list-panel
     /* Removes an image within the coordinates of your hand from the selected images list. Adds it to list panel */
     var removeFromSelectedImages = function(hand) {
       var handPosition = hand.screenPosition();
@@ -117,7 +206,7 @@ var App = function () {
 
       for (; index < selectedImages.length; index++) {
         var currentImage = selectedImages[index];
-
+        //Check if image is under hand
         if (selectedImages[index].isInBounds(handPosition[0], handPosition[1])) {
           //Add image back to list panel
           listImages.push(currentImage);
