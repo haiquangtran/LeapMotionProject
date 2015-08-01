@@ -66,16 +66,6 @@ var App = function () {
       } else if (hand.grabStrength == 0 && selectedImage != null) {
         unselectMainImage(hand);
       }
-      //select an image
-      // selectMainImage(hand);
-      //unselect image
-      // unselectMainImage();
-      //move image
-      // moveMainImage(hand);
-      //scale image
-      // scaleMainImage(hand);
-      //rotate image
-
     };
 
     /* Selects image within coords of hand from the main display. Sets image as the SelectedImage. */
@@ -128,14 +118,6 @@ var App = function () {
         addToSelectedImages(hand);
       }
 
-      //TESTING OTHER GESTURES
-      // if (gesture.type == "screenTap") {
-      //   addToSelectedImages(hand);
-      // } else if (gesture.type == "keyTap") {
-      //   addToSelectedImages(hand);
-      // } else if (gesture.type == "circle") {
-      //   addToSelectedImages(hand);
-      // }
     };
 
     /* Gesture action for moving multiples selected images in the side display to the main display. */
@@ -154,11 +136,6 @@ var App = function () {
         }
       }
 
-      //TESTING CIRCLE GESTURE
-      // if (gesture.type == "circle" && selectedImages.length != 0) {
-      //   console.log("move to main display");
-      //   moveToMainDisplay(gesture);
-      // } 
     }
 
     /* Moves selected images from side-display into main display */
