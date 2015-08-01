@@ -38,10 +38,10 @@ function LeapImage() {
             imageDestId: 'image-display'
         },
     };
-    this.MIN_WIDTH = 140;
-    this.MAX_WIDTH = 340;
-    this.MIN_HEIGHT = 40;
-    this.MAX_HEIGHT = 310;
+    this.MIN_WIDTH = 100;
+    this.MIN_HEIGHT = 89;
+    this.MAX_WIDTH = 500;
+    this.MAX_HEIGHT = 447;
 
 };
 
@@ -101,11 +101,11 @@ LeapImage.prototype.moveTo = function (x, y) {
 
 
 LeapImage.prototype.scaleUp = function () {
-    this._scale(1.025)
+    this._scale(1.025);
 }
 
 LeapImage.prototype.scaleDown = function () {
-    this._scale(0.975)
+    this._scale(0.975);
 }
 
 LeapImage.prototype.bringForward = function(){
@@ -157,9 +157,8 @@ LeapImage.prototype._scale = function (scale) {
     if (newWidth > this.MIN_WIDTH && newWidth < this.MAX_WIDTH
         && newHeight > this.MIN_HEIGHT && newHeight < this.MAX_HEIGHT) {
         $(this.IMAGE).css("width", newWidth);
-        $(this.IMAGE).css("height", newHeight);
+        $(this.IMAGE).css("height", newHeight);   
     }
-
 }
 
 LeapImage.prototype._rotate = function (rotation) {
