@@ -77,7 +77,7 @@ LeapImage.prototype.addToDisplay = function (displayType) {
 }
 
 LeapImage.prototype.tap = function () {
-    console.log("tap");
+    console.log("selected");
     if (this._isSelected()) {
         $(this.IMAGE).removeClass("selected");
     } else {
@@ -131,6 +131,18 @@ LeapImage.prototype.isInBounds = function (x, y) {
     
     return satisfiesHorizontalBounds && satisfiesVerticalBounds;
     
+}
+
+LeapImage.prototype.getWidth = function() {
+    var coords = this._coords();
+    var width = coords.width;    
+    return width;
+}
+
+LeapImage.prototype.getHeight = function() {
+    var coords = this._coords();
+    var height = coords.height;
+    return height;
 }
 
 // Helper methods

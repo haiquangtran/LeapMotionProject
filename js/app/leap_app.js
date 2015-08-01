@@ -4,6 +4,7 @@ var App = function () {
     var mainImages = [];
     var listImages = [];
     var selectedImages = [];
+    var selectedImage;
 
     /* Helper variables - set in uiInit() */
     var page, pageContent, sidebar, imageDisplay;
@@ -25,14 +26,22 @@ var App = function () {
                 $("#cursor").css("left", xValue);
                 $("#cursor").css("top", yValue);
 
-                selectImages(hand);
+           
                 // printGestures(frame);
                 // printHandGestures(frame);
+                selectMultipleImages(hand);
             }
 
         }).use('screenPosition', {
             // scale: 0.25, 
             verticalOffset: 1200
+        });
+
+        //Recognize built-in gestures
+        leapController.on("gesture", function(gesture, frame) {
+          var hand = frame.hands[0];
+
+          moveToMainDisplay(gesture);
         });
 
         // This is fairly important - it prevents the framerate from dropping while there are no hands in the frame.
@@ -41,25 +50,85 @@ var App = function () {
 
     };
 
-
-   var selectImages = function(hand) {
-
+    var selectMultipleImages = function(hand, gesture) {
+      //Select on grab
       if (hand.grabStrength == 1) {
-        var handPosition = hand.screenPosition();
-        var index = 0;
+        console.log("selected multiple images");
+        addToSelectedImages(hand);
+      }
 
-        for (; index < listImages.length; index++) {
-          var currentImage = listImages[index];
-          //Select image
-          if (listImages[index].isInBounds(handPosition[0], handPosition[1])) {
-            currentImage.tap();
-            return;
-          }
-        }
-      } 
+      // if (gesture.type == "screenTap") {
+      //   addToSelectedImages(hand);
+      // }
     };
 
-    /* Identifies the types of in-built gestures and prints the gesture to console */
+    var moveToMainDisplay = function(gesture) {
+      if (gesture.type == "circle" && selectedImages.length != 0) {
+        console.log("move to main display");
+        addToMainImages();
+
+        var index = 0;
+        for (; index < mainImages.length; index++) {
+          var currentImage = mainImages[index];
+          var imageHeight = currentImage.getHeight();
+          var offset = 20;
+          currentImage.addToDisplay("MAIN");
+          currentImage.moveTo(0, (imageHeight + offset) * index);
+        }
+      }
+    }
+
+    /* Adds all images from selectedImages list into mainImages List. Unselects and removes all images in selectedImages list. */
+    var addToMainImages = function() {
+      var index = 0;
+      //Add all selected images to main images list
+      for (; index < selectedImages.length; index++) {
+        var currentImage = selectedImages[index];
+        mainImages.push(currentImage);
+        //unselected and remove all images from selected images list
+        selectedImages[index].tap();
+        selectedImages.splice(index, 1);
+      }
+    };
+
+    /* Adds an image within the coordinates of your hand to the selected images list. Removes it from list panel. */
+    var addToSelectedImages = function(hand) {
+      var handPosition = hand.screenPosition();
+      var index = 0;
+
+      for (; index < listImages.length; index++) {
+        var currentImage = listImages[index];
+
+        if (listImages[index].isInBounds(handPosition[0], handPosition[1])) {
+          selectedImages.push(currentImage);
+          //Select image
+          currentImage.tap();
+          //Remove from list panel
+          listImages.splice(index, 1);
+          return;
+        }
+      }
+    };
+
+    /* Removes an image within the coordinates of your hand from the selected images list. Adds it to list panel */
+    var removeFromSelectedImages = function(hand) {
+      var handPosition = hand.screenPosition();
+      var index = 0;
+
+      for (; index < selectedImages.length; index++) {
+        var currentImage = selectedImages[index];
+
+        if (selectedImages[index].isInBounds(handPosition[0], handPosition[1])) {
+          //Add image back to list panel
+          listImages.push(currentImage);
+          //Remove from selected images
+          selectedImages.splice(index, 1);
+          return;
+        }
+      }
+    }
+
+    /* (USED FOR TESTING GESTURES) - Identifies the types of in-built gestures and prints the gesture to console */
     var printGestures = function(frame) {
       if(frame.valid && frame.gestures.length > 0){
         frame.gestures.forEach(function(gesture){
@@ -101,7 +170,7 @@ var App = function () {
       }
     }
 
-    /* Identifies the types of hand gestures and prints the gesture to console */
+    /* (USED FOR TESTING GESTURES) - Identifies the types of hand gestures and prints the gesture to console */
     var printHandGestures = function(frame) {
       if (frame.hands.length > 0) {
           var hand = frame.hands[0];

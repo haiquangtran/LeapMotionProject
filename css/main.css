@@ -20,6 +20,8 @@ MAIN STYLES
     margin-bottom: 20px;
 }
 .image-thumbnail.selected {
+    border: 4px solid;
+    border-color: rgba(255, 255, 255, 1);
     -webkit-animation: border-pulsate-light 2s infinite;
     -moz-animation: border-pulsate-light 2s infinite;
     animation: border-pulsate-light 2s infinite;
