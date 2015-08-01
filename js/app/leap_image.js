@@ -112,8 +112,8 @@ LeapImage.prototype.bringBackward = function(){
     //TODO
 }
 
-LeapImage.prototype.rotate = function(rads){
-    this._rotate(rads);
+LeapImage.prototype.rotate = function(rotation){
+    this._rotate(rotation);
 }
 
 LeapImage.prototype.isInBounds = function (x, y) {
@@ -155,16 +155,12 @@ LeapImage.prototype._scale = function (scale) {
       
 }
 
-LeapImage.prototype._rotate = function (scale) {
+LeapImage.prototype._rotate = function (rotation) {
+
+    this.IMAGE.style.transform = 'rotate(' + -rotation + 'rad)';
+    this.IMAGE.style.webkitTransform = this.IMAGE.style.MozTransform = this.IMAGE.style.msTransform =
+    this.IMAGE.style.OTransform = this.IMAGE.style.transform;
     
-    var width = $(this.IMAGE).css("width").replace(/[^-\d\.]/g, ''),
-        height = $(this.IMAGE).css("height").replace(/[^-\d\.]/g, ''),
-        newWidth = Math.floor(width * scale),
-        newHeight = Math.floor(height * scale);
-    
-    $(this.IMAGE).css("width", newWidth);
-    $(this.IMAGE).css("height", newHeight);
-      
 }
 
 LeapImage.prototype._updateZIndex = function (modZ) {

@@ -26,7 +26,9 @@ var App = function () {
                 $("#cursor").css("left", xValue);
                 $("#cursor").css("top", yValue);
 
+                //Selecting multiples that will be moved to main display
                 selectMultipleImagesGesture(hand);
+                //Selecting and moving an image in main display
                 manipulateMainImageGesture(hand);
             }
 
@@ -45,6 +47,7 @@ var App = function () {
 
     };
 
+    /* Gesture actions for selection and manipulating an image in the main display */
     var manipulateMainImageGesture = function(hand) {
       if (mainImages.length == 0) { return; }
 
@@ -58,7 +61,7 @@ var App = function () {
         //scale selected Image
 
         //rotate selected Image
-
+        rotateMainImage(hand);
 
       } else if (hand.grabStrength == 0 && selectedImage != null) {
         unselectMainImage(hand);
@@ -75,6 +78,7 @@ var App = function () {
 
     };
 
+    /* Selects image within coords of hand from the main display. Sets image as the SelectedImage. */
     var selectMainImage = function(hand) {
       if (selectedImage != null || selectedImages.length != 0) { return; }
 
@@ -90,11 +94,13 @@ var App = function () {
       }
     };
 
+    /* Unselects the image from the main display. Sets selectedImage to null. */
     var unselectMainImage = function(hand) {
       if (selectedImage == null) { return; }
       selectedImage = null;
     }
 
+    /* Moves the selectedImage on the main display.  */
     var moveMainImage = function(hand) {
       if (selectedImage != null) {
 
@@ -107,12 +113,18 @@ var App = function () {
       }
     }
 
+    /* Rotates the selectedImage on the main display. */
+    var rotateMainImage = function(hand) {
+      if (selectedImage == null) { return; }
+      selectedImage.rotate(hand.roll());
+    }
+
+    /* Gesture action for selecting multiples images in the side display. */
     var selectMultipleImagesGesture = function(hand, gesture) {
       if (listImages.length == 0 || selectedImage != null) { return; }
 
       //Select on grab
       if (hand.grabStrength == 1) {
-        console.log("selected multiple images");
         addToSelectedImages(hand);
       }
 
@@ -126,6 +138,7 @@ var App = function () {
       // }
     };
 
+    /* Gesture action for moving multiples selected images in the side display to the main display. */
     var moveToMainDisplayGesture = function(gesture) {
       if (selectedImages.length == 0) { return; }
 
@@ -148,7 +161,7 @@ var App = function () {
       // } 
     }
 
-    /* Moves selected images from list-panel into main display */
+    /* Moves selected images from side-display into main display */
     var moveToMainDisplay = function(gesture) {
       addToMainImages();
 
@@ -157,7 +170,7 @@ var App = function () {
         var currentImage = mainImages[index];
         var imageHeight = currentImage.IMAGE.height;
         var offset = 10;
-        //only move images from list panel
+        //only move images from side-display
         if (!currentImage._isInMainDisplay()){
           currentImage.addToDisplay("MAIN");
           //TODO: figure out where to put the images on main display
@@ -179,7 +192,7 @@ var App = function () {
       }
     };
 
-    /* Adds an image within the coordinates of your hand to the selected images list. Removes it from list panel. */
+    /* Adds an image within the coordinates of your hand to the selected images list. Removes it from side-display. */
     var addToSelectedImages = function(hand) {
       var handPosition = hand.screenPosition();
       var index = 0;
@@ -191,15 +204,15 @@ var App = function () {
           selectedImages.push(currentImage);
           //Select image
           currentImage.tap();
-          //Remove from list panel
+          //Remove from side-display
           listImages.splice(index, 1);
           return;
         }
       }
     };
 
-    // TODO: unselect images from list-panel
-    /* Removes an image within the coordinates of your hand from the selected images list. Adds it to list panel */
+    // TODO: unselect images from side-display
+    /* Removes an image within the coordinates of your hand from the selected images list. Adds it to side-display */
     var removeFromSelectedImages = function(hand) {
       var handPosition = hand.screenPosition();
       var index = 0;
@@ -208,7 +221,7 @@ var App = function () {
         var currentImage = selectedImages[index];
         //Check if image is under hand
         if (selectedImages[index].isInBounds(handPosition[0], handPosition[1])) {
-          //Add image back to list panel
+          //Add image back to side-display
           listImages.push(currentImage);
           //Remove from selected images
           selectedImages.splice(index, 1);
