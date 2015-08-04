@@ -14,6 +14,12 @@ MAIN STYLES
 #cursor span {
     color: grey;
 }
+#cursor.selecting span {
+    color: #1B84F4;
+}
+.glyphicon {
+    font-size: 20px;
+}
 .image-thumbnail {
     border: 2px solid;
     border-color: rgba(253, 227, 167, 0.2);

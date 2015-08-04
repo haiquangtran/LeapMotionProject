@@ -81,13 +81,11 @@ LeapImage.prototype.addToDisplay = function (displayType) {
 }
 
 LeapImage.prototype.tap = function () {
-    console.log("selected");
     if (this._isSelected()) {
         $(this.IMAGE).removeClass("selected");
     } else {
         $(this.IMAGE).addClass("selected")
-    }
-    
+    }   
 }
 
 LeapImage.prototype.moveTo = function (x, y) {
