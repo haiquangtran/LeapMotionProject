@@ -4,6 +4,10 @@ MAIN STYLES
 =================================================================
 */
 
+body{
+    overflow:hidden; /* Never show scrollbars */
+}
+
 #cursor {
     position: absolute;
     width: 20px;
@@ -88,4 +92,3 @@ ANIMATIONS
         border-color: rgba(38, 194, 129, 1);
     }
 }
-
