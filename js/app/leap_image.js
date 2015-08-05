@@ -150,14 +150,10 @@ LeapImage.prototype._isInMainDisplay = function () {
 LeapImage.prototype._scale = function (scale) {
     
     var width = $(this.IMAGE).css("width").replace(/[^-\d\.]/g, ''),
-        height = $(this.IMAGE).css("height").replace(/[^-\d\.]/g, ''),
-        newWidth = Math.floor(width * scale),
-        newHeight = Math.floor(height * scale);
+        newWidth = Math.floor(width * scale);
     
-    if (newWidth > this.MIN_WIDTH && newWidth < this.MAX_WIDTH
-        && newHeight > this.MIN_HEIGHT && newHeight < this.MAX_HEIGHT) {
+    if (newWidth > this.MIN_WIDTH && newWidth < this.MAX_WIDTH) {
         $(this.IMAGE).css("width", newWidth);
-        $(this.IMAGE).css("height", newHeight);   
     }
 }
 
