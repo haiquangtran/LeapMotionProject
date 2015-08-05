@@ -92,3 +92,19 @@ ANIMATIONS
         border-color: rgba(38, 194, 129, 1);
     }
 }
+
+/*
+=================================================================
+Positioning sidebar on right
+=================================================================
+*/
+#sidebar {
+    position: absolute;
+    right: 0px;
+    top: 0;
+    width: 220px;
+}
+
+#main-container {
+    margin-left: 0px !important;
+}
