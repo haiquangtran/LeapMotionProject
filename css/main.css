@@ -110,3 +110,7 @@ Positioning sidebar on right
 #main-container {
     margin-left: 0px !important;
 }
+
+#image-display {
+    margin-right:300px; /* Fix bounds issue */
+}
