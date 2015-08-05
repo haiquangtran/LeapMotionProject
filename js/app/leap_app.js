@@ -8,6 +8,7 @@ var App = function () {
     var selectedImages = [];
     var selectedImage = null; //selected image in main display
     var selecting = false;
+    var yOffsetTotal = 10;
 
     /* Helper variables - set in uiInit() */
     var page, pageContent, sidebar, imageDisplay;
@@ -240,16 +241,17 @@ var App = function () {
     var moveToMainDisplay = function (gesture) {
         addToMainImages();
 
-        var index = 0;
+        var index = 0; var offset = 10;
         for (; index < mainImages.length; index++) {
             var currentImage = mainImages[index];
-            var imageHeight = currentImage.IMAGE.height;
-            var offset = 10;
+            var imageHeight = currentImage.IMAGE.clientHeight;
+
             //only move images from side-display
             if (!currentImage._isInMainDisplay()) {
                 currentImage.addToDisplay("MAIN");
-                //TODO: figure out where to put the images on main display
-                currentImage.moveTo(0, offset + (imageHeight + offset) * (index));
+
+                currentImage.moveTo(0, offset + yOffsetTotal);
+                yOffsetTotal += imageHeight+offset;
             }
         }
     };

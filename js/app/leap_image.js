@@ -10,10 +10,12 @@ function LeapImage() {
     var src_path = imageDir + random_int + imageFormat;
 
     // create new image
-    this.IMAGE = new Image(190, 170);
+    this.IMAGE = new Image();
 
     // set the image source to the path we created
     this.IMAGE.src = src_path;
+
+    this.IMAGE.width = 260;
     
     // set the z-index
     $(this.IMAGE).css('z-index', 0);
