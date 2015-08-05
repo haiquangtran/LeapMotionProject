@@ -41,9 +41,9 @@ function LeapImage() {
         },
     };
     this.MIN_WIDTH = 100;
-    this.MIN_HEIGHT = 89;
+    this.MIN_Z = 0;
     this.MAX_WIDTH = 500;
-    this.MAX_HEIGHT = 447;
+    this.MAX_Z = 20;
 
 };
 
@@ -109,11 +109,11 @@ LeapImage.prototype.scaleDown = function () {
 }
 
 LeapImage.prototype.bringForward = function(){
-    //TODO
+    this._updateZIndex(1.0);
 }
 
 LeapImage.prototype.bringBackward = function(){
-    //TODO
+    this._updateZIndex(-1.0);
 }
 
 LeapImage.prototype.rotate = function(rotation){
@@ -167,9 +167,11 @@ LeapImage.prototype._rotate = function (rotation) {
 
 LeapImage.prototype._updateZIndex = function (modZ) {
     var curZ = $(this.IMAGE).css('z-index').replace(/[^-\d\.]/g, ''),
-        newZ = curZ + modZ;
-    
-    $(this.IMAGE).css('z-index', newZ);
+        newZ = Number(curZ) + modZ;
+
+    if (newZ > this.MIN_Z && newZ < this.MAX_Z) {
+        $(this.IMAGE).css('z-index', newZ);
+    }
 }
 
 LeapImage.prototype._coords = function () {

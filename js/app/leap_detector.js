@@ -70,8 +70,8 @@ LeapDetector.prototype.gestureIsCounterClockwiseCircle = function (frame, gestur
 /* PINCH IN */
 LeapDetector.prototype.handIsPinchingIn = function (hand) {
     
-    if (hand.pinchStrength < 0.5) {
-        return false;
+    if (hand.pinchStrength > 0.8) {
+        return true;
     }
 
 };
@@ -79,7 +79,7 @@ LeapDetector.prototype.handIsPinchingIn = function (hand) {
 /* PINCH OUT */
 LeapDetector.prototype.handIsPinchingOut = function (hand) {
     
-    if (hand.pinchStrength >= 0.5) {
+    if (hand.pinchStrength < 0.2) {
         return true;
     }
     

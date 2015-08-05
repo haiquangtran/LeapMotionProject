@@ -103,8 +103,9 @@ var App = function () {
                 } else {
                     //given we have an image selected
                     moveMainImage(rightHand);
-                    rotateMainImage(rightHand);   
-                    
+                    rotateMainImage(rightHand);
+                    bringForwardMainImage(rightHand);
+                    bringBackwardMainImage(rightHand);
                 }
                
             }
