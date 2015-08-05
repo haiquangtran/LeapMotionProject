@@ -35,6 +35,8 @@ body{
     -webkit-animation: border-pulsate-light 2s infinite;
     -moz-animation: border-pulsate-light 2s infinite;
     animation: border-pulsate-light 2s infinite;
+    -webkit-filter: drop-shadow(12px 12px 7px rgba(0,0,0,0.5));
+    filter: drop-shadow(12px 12px 7px rgba(0,0,0,0.5));
 }
 .image{
     border: 2px solid;
