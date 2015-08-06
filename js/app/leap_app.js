@@ -233,7 +233,7 @@ var App = function () {
             return;
         }
 
-        if (detect.gestureIsRightSwipe(gesture)) {
+        if (detect.gestureIsLeftSwipe(gesture)) {
             moveToMainDisplay(gesture);
         }
     };

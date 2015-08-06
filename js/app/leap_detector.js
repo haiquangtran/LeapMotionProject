@@ -38,6 +38,28 @@ LeapDetector.prototype.gestureIsRightSwipe = function (gesture) {
 
 };
 
+/* LEFT SWIPE */
+LeapDetector.prototype.gestureIsLeftSwipe = function (gesture) {
+
+    if (gesture.type == "swipe") {
+        //Classify swipe as either horizontal or vertical
+        var isHorizontal = Math.abs(gesture.direction[0]) > Math.abs(gesture.direction[1]);
+
+        if (isHorizontal) {
+            //LEFT swipe
+            if (gesture.direction[0] <= 0) {
+
+                return true;
+
+            }
+        }
+    }
+
+    return false;
+
+};
+
+
 /* SCREEN TAP */
 LeapDetector.prototype.gestureIsScreenTap = function (gesture){
    return (gesture.type == "screenTap");
