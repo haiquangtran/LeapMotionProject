@@ -242,7 +242,7 @@ var App = function () {
     var moveToMainDisplay = function (gesture) {
         addToMainImages();
 
-        var index = 0; var offset = 10;
+        var index = 0; var offset = 10; var startX = document.getElementById("image-display").offsetWidth;
         for (; index < mainImages.length; index++) {
             var currentImage = mainImages[index];
             var imageHeight = currentImage.IMAGE.clientHeight;
@@ -251,7 +251,7 @@ var App = function () {
             if (!currentImage._isInMainDisplay()) {
                 currentImage.addToDisplay("MAIN");
 
-                currentImage.moveTo(0, offset + yOffsetTotal);
+                currentImage.moveTo(startX - currentImage.IMAGE.clientWidth, offset + yOffsetTotal);
                 yOffsetTotal += imageHeight+offset;
             }
         }
