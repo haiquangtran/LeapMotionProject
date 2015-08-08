@@ -20,24 +20,22 @@ LeapDetector.prototype.handIsGrabbing = function (hand) {
 /* HAND TOWARDS SCREEN */
 LeapDetector.prototype.handIsForward = function (hand) {
     var zIndex = hand.palmPosition[2];
-    var threshold = 80;
+    var threshold = 50;
 
     if (zIndex < -threshold) {
-        console.log("FORWARD");
         return true;
     }
 
     return false; 
-    
+
 }
 
 /* HAND AWAY FROM SCREEN */
 LeapDetector.prototype.handIsBackward = function (hand) {
     var zIndex = hand.palmPosition[2];
-    var threshold = 80;
+    var threshold = 50;
 
     if (zIndex > threshold) {
-        console.log("BACKWARD");
         return true;
     }
 

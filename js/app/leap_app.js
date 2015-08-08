@@ -215,7 +215,7 @@ var App = function () {
             return;
         }
 
-        if (detect.handIsPinchingOut(hand)) {
+        if (detect.handIsForward(hand)) {
             selectedImage.bringForward();
         }
     };
@@ -226,7 +226,7 @@ var App = function () {
             return;
         }
 
-        if (detect.handIsPinchingIn(hand)) {
+        if (detect.handIsBackward(hand)) {
             selectedImage.bringBackward()
         }
     };
