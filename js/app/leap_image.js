@@ -18,7 +18,7 @@ function LeapImage() {
     this.IMAGE.width = 260;
     
     // set the z-index
-    $(this.IMAGE).css('z-index', 0);
+    $(this.IMAGE).css('z-index', 1);
     
     // set temporary bound values
     this.minBoundX = 0;
@@ -169,7 +169,7 @@ LeapImage.prototype._updateZIndex = function (modZ) {
     var curZ = $(this.IMAGE).css('z-index').replace(/[^-\d\.]/g, ''),
         newZ = Number(curZ) + modZ;
 
-    if (newZ > this.MIN_Z && newZ < this.MAX_Z) {
+    if (newZ >= this.MIN_Z && newZ <= this.MAX_Z) {
         $(this.IMAGE).css('z-index', newZ);
     }
 }

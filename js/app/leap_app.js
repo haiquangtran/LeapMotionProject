@@ -90,9 +90,6 @@ var App = function () {
                 if (gesture.type == "circle") {
                     zoomMainImage(frame, gesture);
                 }
-                //TODO must detect if it's a pinching gesture
-                //bringBackwardMainImage(rightHand);
-                //bringForwardMainImage(rightHand);
                 
             } else {
                 //detect passive manipulation gestures
@@ -106,6 +103,8 @@ var App = function () {
                     rotateMainImage(rightHand);
                     bringForwardMainImage(rightHand);
                     bringBackwardMainImage(rightHand);
+                    //TODO: find better fix
+                    changeZIndex(rightHand);
                 }
                
             }
@@ -113,6 +112,35 @@ var App = function () {
 
     };
     
+    /* Handles the case where selectedImage and another image have the same z index */
+    var changeZIndex = function (hand) {
+        if (selectedImage == null) { 
+            return; 
+        }
+
+        var zIndex = $(selectedImage.IMAGE).css("z-index");
+        var handPosition = hand.screenPosition();
+        var index = 0;
+        for (; index < mainImages.length; index++) {
+            var currentImage = mainImages[index];
+            //the z index of the image below
+            var belowZIndex = $(currentImage.IMAGE).css("z-index"); 
+
+            if (selectedImage != currentImage 
+                && currentImage.isInBounds(handPosition[0], handPosition[1]) && zIndex == belowZIndex) {
+
+                if (zIndex == selectedImage.MIN_Z) {
+                    currentImage.bringForward();
+                    selectedImage.bringBackward();
+                } else if (zIndex == selectedImage.MAX_Z) {
+                    currentImage.bringBackward();
+                    selectedImage.bringForward();
+                } 
+            }
+        }
+
+    }
+
     /* check whether we are signalling selection */
     var detectSelection = function (hand) {
 

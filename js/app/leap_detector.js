@@ -17,6 +17,34 @@ LeapDetector.prototype.handIsGrabbing = function (hand) {
 
 };
 
+/* HAND TOWARDS SCREEN */
+LeapDetector.prototype.handIsForward = function (hand) {
+    var zIndex = hand.palmPosition[2];
+    var threshold = 80;
+
+    if (zIndex < -threshold) {
+        console.log("FORWARD");
+        return true;
+    }
+
+    return false; 
+    
+}
+
+/* HAND AWAY FROM SCREEN */
+LeapDetector.prototype.handIsBackward = function (hand) {
+    var zIndex = hand.palmPosition[2];
+    var threshold = 80;
+
+    if (zIndex > threshold) {
+        console.log("BACKWARD");
+        return true;
+    }
+
+    return false; 
+
+}
+
 /* RIGHT SWIPE */
 LeapDetector.prototype.gestureIsRightSwipe = function (gesture) {
 
@@ -58,7 +86,6 @@ LeapDetector.prototype.gestureIsLeftSwipe = function (gesture) {
     return false;
 
 };
-
 
 /* SCREEN TAP */
 LeapDetector.prototype.gestureIsScreenTap = function (gesture){
