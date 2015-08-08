@@ -9,7 +9,7 @@ function LeapDetector() {
 /* HAND IS GRABBING */
 LeapDetector.prototype.handIsGrabbing = function (hand) {
 
-    if (hand.grabStrength == 1) {
+    if (hand != null && hand.grabStrength > 0.2 && hand.grabStrength <= 1) {
         return true;
     }
 

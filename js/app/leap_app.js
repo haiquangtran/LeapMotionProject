@@ -144,17 +144,29 @@ var App = function () {
     /* check whether we are signalling selection */
     var detectSelection = function (hand) {
 
-        if (hand != null) { //HEY GUYS: I'm just checking whether the left hand is present rather than clenched
+        if (hand != null && detect.handIsGrabbing(hand)) { //sHEY GUYS: I'm just checking whether the left hand is present rather than clenched
+            
             if(selecting === false){
-                //it's a change, update cursor state
+                //it's a change, update cursor states
                 $("#cursor").addClass("selecting");
             }
+
             selecting = true;
         } else {
-            if(selecting === true){
-                //it's a change, update cursor state
-                $("#cursor").removeClass("selecting");
+
+            if (selecting == true) {
+
+                //release all images if hand opens 
+                if (!detect.handIsGrabbing(hand)) {
+                    var index = 0;
+                    for (; index < selectedImages.length; index++) {
+                        var currentImage = selectedImages[index];
+                        $(currentImage.IMAGE).removeClass("selected");
+                    }
+                }
+
             }
+
             selecting = false;
         }
 
