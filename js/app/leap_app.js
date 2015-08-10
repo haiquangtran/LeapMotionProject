@@ -1,76 +1,44 @@
+// The entire application is namespaced behind this App variable
 var App = function () {
 
-    // Global vars
+    /*
+    =================================================================
+    APP VARIABLES
+    =================================================================
+    */
+
+    // detect is provides detection for abstracted leap motion gestures
     var detect = new LeapDetector();
-    //var test = new LeapTester();
+
+    // Uncomment LeapTester when testing is desired
+    // var test = new LeapTester();
+
+    // utility helps with general resizing and width measuring
+    var utility = new LeapUtility();
+
+    // The array of images currently in the main display
     var mainImages = [];
+
+    // The array of images currently in the list display
     var listImages = [];
+
+    // The array of selected images (if any) in the list display
     var selectedImages = [];
+
+    // The selected image (if any) in the main display
     var selectedImage = null; //selected image in main display
+
+    // Signifies whether the user is currently selecting or not
     var selecting = false;
+
+    // Aesthetic value, so that images added to the main display are not hugging the border
     var yOffsetTotal = 10;
 
-    /* Helper variables - set in uiInit() */
-    var page, pageContent, sidebar, imageDisplay;
-
-    /* Initialisation Leap Motion Code */
-    var leapInit = function () {
-
-        var leapController = Leap.loop({
-            enableGestures: true
-        }, function (frame) {
-
-            //left hand, solely for indicating whether we are selecting
-            var leftHand = detect.getHand("left", frame.hands);
-
-            //TODO: maybe have a timer instead
-            //keep updating whether we are selecting
-            detectSelection(leftHand);
-            
-            if (frame.hands.length > 0) {
-
-                //right hand, solely for manipulating/adding selected images
-                var rightHand = detect.getHand("right", frame.hands);
-                
-                if (rightHand != null) {
-                    var handPosition = rightHand.screenPosition();
-                    var xValue = handPosition[0] + "px";
-                    var yValue = handPosition[1] + "px";
-
-                    $("#cursor").css("left", xValue);
-                    $("#cursor").css("top", yValue);
-                }
-
-                if (selecting && rightHand != null) {
-                    //Selecting multiples that will be moved to main display
-                    selectMultipleImagesGesture(rightHand);
-                } else if (!selecting) {
-                    //release all selections, if any
-                    deselectMainImage();
-                    deselectListImages();
-                }
-
-                //Select or deselect image in main display
-                manipulateMainImageGesture(frame);
-
-            }
-
-        }).use('screenPosition', {
-            verticalOffset: 1200
-        });
-
-        //Recognize built-in gestures
-        leapController.on("gesture", function (gesture, frame) {
-            //Moving and manipulating an image in main display
-            manipulateMainImageGesture(frame, gesture);
-            moveToMainDisplayGesture(gesture);
-        });
-
-        // This is fairly important - it prevents the framerate from dropping while there are no hands in the frame.
-        Leap.loopController.loopWhileDisconnected = true;
-
-    };
-
+    /*
+    =================================================================
+    INTERACTION BUSINESS LOGIC
+    =================================================================
+    */
 
     /* Gesture actions for selection and manipulating an image in the main display */
     var manipulateMainImageGesture = function (frame, gesture) {
@@ -80,62 +48,72 @@ var App = function () {
 
         //Retrieve, the right hand which is for gesturing manipulation
         var rightHand = detect.getHand("right", frame.hands);
-        
+
         //We (attempt to) manipulate when we are selecting and the right hand is on screen
         if (selecting && rightHand != null) {
 
             if (gesture != null) {
                 //detect active manipulation gestures
-                
                 if (gesture.type == "circle") {
                     zoomMainImage(frame, gesture);
                 }
-                
+
             } else {
                 //detect passive manipulation gestures
-                
                 if (selectedImage == null) {
                     //try and pick up main image if none already selected
                     selectMainImage(rightHand);
                 } else {
-                    //given we have an image selected
+                    //given we have an image selected...
+                    // update the image's position
                     moveMainImage(rightHand);
+                    // update the image's rotation
                     rotateMainImage(rightHand);
+                    // update the image's z-index
                     bringForwardMainImage(rightHand);
                     bringBackwardMainImage(rightHand);
-                    //TODO: find better fix
+                    // update z-index if there is occlusion, to brind selected image on top
                     changeZIndex(rightHand);
                 }
-               
+
             }
         }
 
     };
-    
+
     /* Handles the case where selectedImage and another image have the same z index */
     var changeZIndex = function (hand) {
-        if (selectedImage == null) { 
-            return; 
+        if (selectedImage == null) {
+            return;
         }
 
+        // get the currently selected image's z-index
         var zIndex = $(selectedImage.IMAGE).css("z-index");
         var handPosition = hand.screenPosition();
         var index = 0;
+        // iterate through the main images
         for (; index < mainImages.length; index++) {
             var currentImage = mainImages[index];
             //the z index of the image below
-            var belowZIndex = $(currentImage.IMAGE).css("z-index"); 
+            var belowZIndex = $(currentImage.IMAGE).css("z-index");
 
-            if (selectedImage != currentImage 
-                && currentImage.isInBounds(handPosition[0], handPosition[1]) && zIndex == belowZIndex) {
+            // if the image being inspected is not the selected image,
+            // and it is in the bounds of where we are currently selecting
+            // and the images are at the same zIndex....
+            if (selectedImage != currentImage
+                && currentImage.isInBounds(handPosition[0], handPosition[1])
+                && zIndex == belowZIndex) {
 
+                // Move the images along the z-index accordingly
                 if (zIndex == selectedImage.MIN_Z) {
+                    // if they are at the bottom
                     currentImage.bringForward();
                     selectedImage.bringBackward();
                 } else if (zIndex == selectedImage.MAX_Z) {
+                    // if they are at the top
                     currentImage.bringBackward();
                     selectedImage.bringForward();
-                } 
+                }
             }
         }
 
@@ -143,33 +121,33 @@ var App = function () {
 
     /* check whether we are signalling selection */
     var detectSelection = function (hand) {
-
-        if (hand != null && detect.handIsGrabbing(hand)) { //sHEY GUYS: I'm just checking whether the left hand is present rather than clenched
-            
-            if(selecting === false){
-                //it's a change, update cursor states
+        // if the hand is present, and it is grabbing ...
+        if (hand != null && detect.handIsGrabbing(hand)) {
+            // check if it was previously not selecting
+            if (selecting === false) {
+                //it's a change, update cursor state to selecting
                 $("#cursor").addClass("selecting");
             }
-
+            // update the current state, as hand grabbing signifies selection
             selecting = true;
         } else {
-
+        // if the hand is not present or it is not grabbing...
             if (selecting == true) {
-
-                //release all images if hand opens 
+                //release all images if hand opens
                 if (!detect.handIsGrabbing(hand)) {
+                    // iterate through and update the slected image state to 'not selected'
                     var index = 0;
                     for (; index < selectedImages.length; index++) {
                         var currentImage = selectedImages[index];
                         $(currentImage.IMAGE).removeClass("selected");
                     }
                 }
-
+                //it's a change, update cursor state
+                $("#cursor").removeClass("selecting");
             }
-
+            // update the current state, as the user is not inidicating selectopn
             selecting = false;
         }
-
     };
 
     /* Selects image within coords of hand from the main display. Sets image as the SelectedImage. */
@@ -227,17 +205,21 @@ var App = function () {
             return;
         }
 
+        // Check if the hand is forward relative to the leap motion...
+        // if so, move the slected image forward
         if (detect.handIsForward(hand)) {
             selectedImage.bringForward();
         }
     };
-    
+
     /* Bring backward the main image. */
     var bringBackwardMainImage = function (hand) {
         if (selectedImage == null) {
             return;
         }
 
+        // Check if the hand is back relative to the leap motion...
+        // if so, move the slected image back
         if (detect.handIsBackward(hand)) {
             selectedImage.bringBackward()
         }
@@ -248,7 +230,9 @@ var App = function () {
         if (selectedImage == null) {
             return;
         }
-        
+
+        // check if we can recognise circle gestures...
+        // if recognised, scale accordingly
         if (detect.gestureIsClockwiseCircle(frame, gesture)) {
             selectedImage.scaleUp();
         } else if (detect.gestureIsCounterClockwiseCircle(frame, gesture)) {
@@ -262,6 +246,7 @@ var App = function () {
             return;
         }
 
+        // if we are selecting, check if the hand is over an image and add it to the selected array
         if (selecting) {
             addToSelectedImages(hand);
         }
@@ -273,6 +258,7 @@ var App = function () {
             return;
         }
 
+        // if we detect a left swipe, move the selected images to the main display
         if (detect.gestureIsLeftSwipe(gesture)) {
             moveToMainDisplay(gesture);
         }
@@ -317,7 +303,7 @@ var App = function () {
 
         for (; index < listImages.length; index++) {
             var currentImage = listImages[index];
-               
+
             //Check if image is under hand
             if (currentImage.isInBounds(handPosition[0], handPosition[1])) {
                 selectedImages.push(currentImage);
@@ -330,28 +316,9 @@ var App = function () {
         }
     };
 
-    // TODO: deselect images from side-display
-    /* Removes an image within the coordinates of your hand from the selected images list. Adds it to side-display */
-    var removeFromSelectedImages = function (hand) {
-        var handPosition = hand.screenPosition();
-        var index = 0;
-
-        for (; index < selectedImages.length; index++) {
-            var currentImage = selectedImages[index];
-            //Check if image is under hand
-            if (currentImage.isInBounds(handPosition[0], handPosition[1])) {
-                //Add image back to side-display
-                listImages.push(currentImage);
-                //Remove from selected images
-                selectedImages.splice(index, 1);
-                return;
-            }
-        }
-    };
-
     /* Unselect all selected list images */
     var deselectListImages = function () {
-        
+
         var index = 0;
         for (; index < selectedImages.length; index++) {
             var currentImage = selectedImages[index];
@@ -360,9 +327,74 @@ var App = function () {
             //Remove from selected images
             selectedImages.splice(index, 1);
         }
-        
+
     };
 
+    /*
+    =================================================================
+    APP BUSINESS LOGIC INITIALISATION
+    =================================================================
+    */
+
+    /* Initialisation Leap Motion Code */
+    var leapInit = function () {
+
+        var leapController = Leap.loop({
+            enableGestures: true
+        }, function (frame) {
+
+            //left hand, solely for indicating whether we are selecting
+            var leftHand = detect.getHand("left", frame.hands);
+
+            //keep updating whether we are selecting
+            detectSelection(leftHand);
+
+            // given we can detect hands...
+            if (frame.hands.length > 0) {
+
+                //right hand, solely for manipulating/adding selected images
+                var rightHand = detect.getHand("right", frame.hands);
+
+                // given we can see a right hand update the cursor's position
+                if (rightHand != null) {
+                    var handPosition = rightHand.screenPosition();
+                    var xValue = handPosition[0] + "px";
+                    var yValue = handPosition[1] + "px";
+                    // position update
+                    $("#cursor").css("left", xValue);
+                    $("#cursor").css("top", yValue);
+                }
+
+                // given we can see a right hand, and we are trying to select...
+                if (selecting && rightHand != null) {
+                    // try selecting multiples that will be moved to main display
+                    selectMultipleImagesGesture(rightHand);
+                } else if (!selecting) {
+                    // otherwise, if we are not selecting release all selections, if any
+                    deselectMainImage();
+                    deselectListImages();
+                }
+
+                //Select or deselect image in main display
+                manipulateMainImageGesture(frame);
+
+            }
+
+        }).use('screenPosition', {
+            verticalOffset: 1200
+        });
+
+        //Recognize built-in gestures
+        leapController.on("gesture", function (gesture, frame) {
+            //Moving and manipulating an image in main display
+            manipulateMainImageGesture(frame, gesture);
+            moveToMainDisplayGesture(gesture);
+        });
+
+        // This is fairly important - it prevents the framerate from dropping while there are no hands in the frame.
+        Leap.loopController.loopWhileDisconnected = true;
+
+    };
 
     /* Initialisation Images Code */
     var imagesInit = function () {
@@ -372,70 +404,25 @@ var App = function () {
         var index = 0;
 
         for (; index < imageLength; index++) {
-
             /** instantiate the new image **/
             var image = new LeapImage();
             //add the image to the
             image.addToDisplay("THUMBNAIL");
             //add the image to the array of list images
             listImages.push(image);
-
         }
-
     };
 
     /* Initialisation UI Code */
     var uiInit = function () {
-
-        // Set variables - Cache some often used jQuery objects in variables */
-        page            = $('#page-container');
-        pageContent     = $('#page-content');
-        sidebar         = $('#sidebar');
-        imageDisplay    = $('#image-display');
-
         // Resize #page-content to fill empty space if exists (also add it to resize and orientationchange events)
-        resizePageContent();
+        // Do initial fit
+        utility.resizePageContent();
+        // Bind window resize/orientation events to the resize function
         $(window).resize(function () {
-            resizePageContent();
+            utility.resizePageContent();
         });
-
-        $(window).bind('orientationchange', resizePageContent);
-
-    };
-
-    /* Initialisation Test Code */
-    var testInit = function () {
-
-        // add all images
-        var imageLength = 4;
-        var index = 0;
-
-        for (; index < imageLength; index++) {
-
-            /** instantiate the new image **/
-            var image = new LeapImage();
-            //add the image to the
-            image.addToDisplay("MAIN");
-            //add the image to the array of list images
-            mainImages.push(image);
-
-        }
-
-    };
-
-    /* Gets window width cross browser */
-    var getWindowWidth = function () {
-        return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-    };
-
-    /* Resize #page-content to fill empty space if exists */
-    var resizePageContent = function () {
-
-        var windowH = $(window).height();
-        pageContent.css('min-height', windowH + 'px');
-        sidebar.css('min-height', windowH + 'px');
-        imageDisplay.css('min-height', windowH - 30 + 'px');
-
+        $(window).bind('orientationchange', utility.resizePageContent);
     };
 
     return {
@@ -443,7 +430,6 @@ var App = function () {
             uiInit();       // Initialise UI Code
             imagesInit();   // Initialise Images Code
             leapInit();     // Initialise LeapMotion Code
-            //testInit();   // Initialise Test Code
         }
     };
 }();

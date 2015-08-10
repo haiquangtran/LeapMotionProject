@@ -406,7 +406,7 @@ a.sidebar-title:focus {
         opacity: 1;
         filter: alpha(opacity=100);
     }
-    
+
     /* Main Sidebar */
     .sidebar-partial #main-container {
         margin-left: 65px;
