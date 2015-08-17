@@ -231,7 +231,7 @@ LeapImage.prototype._calculateBounds = function () {
     this.maxBoundY = parentOffsetTop + parentOffsetHeight - thisOffsetHeight;
 
     // for testing purposes
-    this._setHelperBoxPos();
+    //this._setHelperBoxPos();
 
 }
 
