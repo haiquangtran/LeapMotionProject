@@ -86,8 +86,13 @@ LeapDetector.prototype.gestureIsLeftSwipe = function (gesture) {
 };
 
 /* SCREEN TAP */
-LeapDetector.prototype.gestureIsScreenTap = function (gesture){
+LeapDetector.prototype.gestureIsScreenTap = function (gesture) {
    return (gesture.type == "screenTap");
+};
+
+/* CIRCLE */
+LeapDetector.prototype.gestureIsCircle = function (gesture) {
+    return (gesture.type == "circle");
 };
 
 /* CLOCKWISE CIRCLE */

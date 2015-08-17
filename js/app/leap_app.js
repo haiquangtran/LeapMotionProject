@@ -54,9 +54,7 @@ var App = function () {
 
             if (gesture != null) {
                 //detect active manipulation gestures
-                if (gesture.type == "circle") {
-                    zoomMainImage(frame, gesture);
-                }
+                scaleMainImage(frame, gesture);
 
             } else {
                 //detect passive manipulation gestures
@@ -226,17 +224,29 @@ var App = function () {
     };
 
     /* Scale the selectedImage on the main display. */
-    var zoomMainImage = function (frame, gesture) {
+    var scaleMainImage = function (frame, gesture) {
         if (selectedImage == null) {
             return;
         }
-
+        
         // check if we can recognise circle gestures...
-        // if recognised, scale accordingly
-        if (detect.gestureIsClockwiseCircle(frame, gesture)) {
-            selectedImage.scaleUp();
-        } else if (detect.gestureIsCounterClockwiseCircle(frame, gesture)) {
-            selectedImage.scaleDown();
+        if (detect.gestureIsCircle(gesture)) {
+            var circleRadius = gesture.radius;
+            var completeCircles = Math.floor(gesture.progress);
+            var minRadius = 5;
+            var maxRadius = 30;
+            var numCircles = 1; 
+            
+            // circle constraints
+            if (completeCircles >= numCircles 
+                && circleRadius >= minRadius && circleRadius <= maxRadius) {
+                // scale accordingly
+                if (detect.gestureIsClockwiseCircle(frame, gesture)) {
+                    selectedImage.scaleUp();
+                } else if (detect.gestureIsCounterClockwiseCircle(frame, gesture)) {
+                    selectedImage.scaleDown();
+                }
+            }
         }
     };
 
