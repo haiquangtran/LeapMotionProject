@@ -205,9 +205,9 @@ var App = function () {
             return;
         }
 
-        // Check if the hand is forward relative to the leap motion...
-        // if so, move the slected image forward
-        if (detect.handIsForward(hand)) {
+        // Check if the hand is backward relative to the leap motion...
+        // if so, move the selected image forward
+        if (detect.handIsBackward(hand)) {
             selectedImage.bringForward();
         }
     };
@@ -218,10 +218,10 @@ var App = function () {
             return;
         }
 
-        // Check if the hand is back relative to the leap motion...
-        // if so, move the slected image back
-        if (detect.handIsBackward(hand)) {
-            selectedImage.bringBackward()
+        // Check if the hand is forward relative to the leap motion...
+        // if so, move the selected image backward
+        if (detect.handIsForward(hand)) {
+            selectedImage.bringBackward();
         }
     };
 
