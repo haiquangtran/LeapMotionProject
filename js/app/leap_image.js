@@ -42,7 +42,7 @@ function LeapImage() {
     };
     this.MIN_WIDTH = 100;
     this.MIN_Z = 0;
-    this.MAX_WIDTH = 500;
+    this.MAX_WIDTH = 700;
     this.MAX_Z = 20;
 
 };
@@ -108,12 +108,12 @@ LeapImage.prototype.moveTo = function (x, y) {
 
 // scale the image's height and width up
 LeapImage.prototype.scaleUp = function () {
-    this._scale(1.025);
+    this._scale(3);
 }
 
 // scale the image's height and width down
 LeapImage.prototype.scaleDown = function () {
-    this._scale(0.975);
+    this._scale(-3);
 }
 
 // increase the image's z-index
@@ -167,10 +167,8 @@ LeapImage.prototype._isInMainDisplay = function () {
 
 // scale the image according to the given scale parameter (or as the MIN and MAX permit)
 LeapImage.prototype._scale = function (scale) {
-
     var width = $(this.IMAGE).css("width").replace(/[^-\d\.]/g, ''),
-        newWidth = Math.floor(width * scale);
-
+        newWidth = Math.floor(parseInt(width, 10) + parseInt(scale, 10));
     if (newWidth > this.MIN_WIDTH && newWidth < this.MAX_WIDTH) {
         $(this.IMAGE).css("width", newWidth);
     }
