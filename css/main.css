@@ -45,6 +45,10 @@ body{
     margin:10px;
 }
 .image.selected{
+    -webkit-transform-origin: center center;
+    -moz-transform-origin: center center;
+    -o-transform-origin: center center;
+    transform-origin: center center;
     -webkit-animation: border-pulsate-dark 2s infinite;
     -moz-animation: border-pulsate-dark 2s infinite;
     animation: border-pulsate-dark 2s infinite;

@@ -156,15 +156,37 @@ var App = function () {
 
         var handPosition = hand.screenPosition();
         var index = 0;
+        var onImages = [];
+        
         for (; index < mainImages.length; index++) {
             var currentImage = mainImages[index];
             //Check if image is under hand
             if (currentImage.isInBounds(handPosition[0], handPosition[1])) {
-                selectedImage = currentImage;
-                selectedImage.tap();
-                return;
+                onImages.push(currentImage);
             }
         }
+        
+        var highestOnImage = null;
+        var currentHighestZIndex = 0;
+        var candidateSelectedImage = null;
+        for (index = 0; index < onImages.length; index++){
+            
+            var zIndex = $(onImages[index].IMAGE).css("z-index");
+            
+            if(highestOnImage === null){
+                highestOnImage = onImages[index];
+            } else if(zIndex > currentHighestZIndex){
+                currentHighestZIndex = zIndex;
+                highestOnImage = onImages[index];
+            }
+        }
+        
+        if(highestOnImage !== null){
+            selectedImage = highestOnImage;
+            selectedImage.tap();
+            return;
+        }
+        
     };
 
     /* Deselects the image from the main display. Sets selectedImage to null. */
@@ -384,7 +406,6 @@ var App = function () {
                     deselectMainImage();
                     deselectListImages();
                 }
-
                 //Select or deselect image in main display
                 manipulateMainImageGesture(frame);
 
